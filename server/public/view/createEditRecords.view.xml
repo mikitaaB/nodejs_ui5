@@ -1,0 +1,94 @@
+<mvc:View
+		controllerName="project.app.controller.createEditRecords"
+		displayBlock="true"
+		xmlns="sap.m"
+		xmlns:f="sap.ui.layout.form"
+		xmlns:mvc="sap.ui.core.mvc">
+	<App
+			id="idAppControl">
+		<pages>
+			<Page
+					id="createEditRecordsPage"
+					showNavButton="true"
+					navButtonPress="onNavBack"
+					title="{i18n>title}">
+				<content>
+				    <f:SimpleForm
+							id="idPersonForm"
+							columnsL="1"
+							columnsM="1"
+							editable="true"
+							labelSpanL="3"
+							labelSpanM="3"
+							layout="ResponsiveLayout"
+							emptySpanL="4"
+							emptySpanM="4"
+							width="100%">
+				        <Label
+								id="label0"
+								text="{i18n>FIRST_NAME}"
+								vAlign="Middle"
+								required="true" />
+				        <Input
+								id="idFirstName"
+								value="{data>/firstName}" />
+
+				        <Label
+								id="label_1"
+								text="{i18n>MIDDLE_NAME}"
+								vAlign="Middle"
+								required="true" />
+				        <Input
+								id="idMiddleName"
+								value="{data>/middleName}" />
+
+				        <Label
+								id="label1"
+								text="{i18n>LAST_NAME}"
+								vAlign="Middle"
+								required="true" />
+				        <Input
+								id="idLastName"
+								value="{data>/lastName}" />
+
+				        <Label
+								id="label2"
+								text="{i18n>POSITION}"
+								vAlign="Middle" />
+				        <Input
+								id="idPosition"
+								value="{data>/post}" />
+
+				        <Label
+								id="label3"
+								text="{i18n>PHONE}"
+								vAlign="Middle" />
+				        <Input
+								id="idPhone"
+								value="{data>/number}" />
+
+				        <Label
+								id="label4"
+								text="{i18n>ADDRESS}"
+								vAlign="Middle" />
+				        <Input
+								id="idAddress"
+								value="{data>/address}" />
+				    </f:SimpleForm>
+				    <HBox>
+				    	<Button
+								class="fieldDeletePopupButton"
+								press="onSave"
+								text="{i18n>SAVE}"
+								width="100px" />
+				    	<Button
+								class="fieldDeletePopupButton"
+								press="onNavBack"
+								text="{i18n>CANCEL}"
+								width="100px" />
+				    </HBox>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

@@ -1,0 +1,30 @@
+[
+    {
+        "Id": "0",
+        "IdentityDataId": "110",
+        "ContactDataId": "1100",
+        "Photo": "./photos/p1.png",
+        "Position": "Должность"
+    },
+    {
+        "Id": "1",
+        "IdentityDataId": "111",
+        "ContactDataId": "1111",
+        "Photo": "./photos/p2.jpg",
+        "Position": "Должность1"
+    },
+    {
+        "Id": "2",
+        "IdentityDataId": "112",
+        "ContactDataId": "1122",
+        "Photo": "./photos/p3.jpeg",
+        "Position": "Должность2"
+    },
+    {
+        "Id": "3",
+        "IdentityDataId": "113",
+        "ContactDataId": "1133",
+        "Photo": "",
+        "Position": "Должность3"
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "IdentityDataId": "110",
+        "FirstName": "Имя",
+        "MiddleName": "Отчество",
+        "LastName": "Фамилия"
+    },
+    {
+        "IdentityDataId": "111",
+        "FirstName": "Имя1",
+        "MiddleName": "Отчество1",
+        "LastName": "Фамилия1"
+    },
+    {
+        "IdentityDataId": "112",
+        "FirstName": "Имя2",
+        "MiddleName": "Отчество2",
+        "LastName": "Фамилия2"
+    },
+    {
+        "IdentityDataId": "113",
+        "FirstName": "Имя3",
+        "MiddleName": "Отчество3",
+        "LastName": "Фамилия3"
+    }
+]

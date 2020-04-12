@@ -1,0 +1,22 @@
+[
+    {
+        "ContactDataId": "1100",
+        "Phone": "Номер",
+        "Address": "Кирова, 123"
+    },
+    {
+        "ContactDataId": "1111",
+        "Phone": "Номер1",
+        "Address": "Кирова, 1"
+    },
+    {
+        "ContactDataId": "1122",
+        "Phone": "Номер2",
+        "Address": "Кирова, 2"
+    },
+    {
+        "ContactDataId": "1133",
+        "Phone": "Номер3",
+        "Address": "Кирова, 3"
+    }
+]

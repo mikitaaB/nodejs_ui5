@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+	xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema Namespace="PersonalDataModel"
+			sap:schema-version="1"
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+
+			<EntityType Name="PersonData" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Id" />
+				</Key>
+				<Property Name="Id" Type="Edm.String" Nullable="false" MaxLength="1" />
+				<Property Name="IdentityDataId" Type="Edm.String" Nullable="false"/>
+				<Property Name="ContactDataId" Type="Edm.String" Nullable="false"/>
+				<Property Name="Position" Type="Edm.String" Nullable="false" MaxLength="100" />
+				<Property Name="Photo" Type="Edm.String" Nullable="true" MaxLength="100" />
+				<NavigationProperty Name="IdentityData" Relationship="PersonalDataModel.FK_Personal_Identity" FromRole="PersonData" ToRole="IdentityData" />
+				<NavigationProperty Name="ContactData" Relationship="PersonalDataModel.FK_Personal_Contact" FromRole="PersonData" ToRole="ContactData" />
+			</EntityType>
+
+			<EntityType Name="IdentityData">
+				<Key>
+					<PropertyRef Name="IdentityDataId" />
+				</Key>
+				<Property Name="IdentityDataId" Type="Edm.String" Nullable="false" />
+				<Property Name="FirstName" Type="Edm.String" Nullable="false" MaxLength="100" />
+				<Property Name="MiddleName" Type="Edm.String" Nullable="false" MaxLength="100" />
+				<Property Name="LastName" Type="Edm.String" Nullable="false" MaxLength="100" />
+			</EntityType>
+			
+			<EntityType Name="ContactData">
+				<Key>
+					<PropertyRef Name="ContactDataId" />
+				</Key>
+				<Property Name="ContactDataId" Type="Edm.String" Nullable="false" />
+				<Property Name="Phone" Type="Edm.String" Nullable="false" MaxLength="100" />
+				<Property Name="Address" Type="Edm.String" Nullable="false" MaxLength="100" />
+			</EntityType>
+
+			<Association Name="FK_Personal_Identity">
+				<End Type="PersonalDataModel.PersonData" Multiplicity="1" Role="PersonData" />
+				<End Type="PersonalDataModel.IdentityData" Multiplicity="1" Role="IdentityData" />
+				<ReferentialConstraint>
+					<Principal Role="IdentityData">
+						<PropertyRef Name="IdentityDataId"/>
+					</Principal>
+					<Dependent Role="PersonData">
+						<PropertyRef Name="IdentityDataId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			
+			<Association Name="FK_Personal_Contact">
+				<End Type="PersonalDataModel.PersonData" Multiplicity="1" Role="PersonData" />
+				<End Type="PersonalDataModel.ContactData" Multiplicity="1" Role="ContactData" />
+				<ReferentialConstraint>
+					<Principal Role="ContactData">
+						<PropertyRef Name="ContactDataId"/>
+					</Principal>
+					<Dependent Role="PersonData">
+						<PropertyRef Name="ContactDataId"/>
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+
+			<EntityContainer Name="PersonData_Entities" m:IsDefaultEntityContainer="true">
+				<EntitySet Name="PersonDatas" EntityType="PersonalDataModel.PersonData" />
+				<EntitySet Name="IdentityDatas" EntityType="PersonalDataModel.IdentityData" />
+				<EntitySet Name="ContactDatas" EntityType="PersonalDataModel.ContactData" />
+				<AssociationSet Name="FK_Personal_Identity" Association="PersonalDataModel.FK_Personal_Identity">
+					<End EntitySet="PersonDatas" Role="PersonData" />
+					<End EntitySet="IdentityDatas" Role="IdentityData" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Personal_Contact" Association="PersonalDataModel.FK_Personal_Contact">
+					<End EntitySet="PersonDatas" Role="PersonData" />
+					<End EntitySet="ContactDatas" Role="ContactData" />
+				</AssociationSet>
+			</EntityContainer>
+
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>

@@ -1,0 +1,58 @@
+.icon {
+    -webkit-text-stroke-width: thin;
+    cursor: pointer;
+    outline: none;
+    padding-top: 7px;
+    padding-right: 8px;
+}
+
+.fieldDeletePopupButton {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.fieldDeletePopup {
+    margin-top: 5px;
+    width: 215px;
+}
+
+.fieldDeletePopup:not(.withNormPadding) .sapMPopoverScroll {
+    padding: 5px 5px 5px 5px;
+}
+
+.fieldDeletePopup.withNormPadding .sapMPopoverScroll {
+    padding: 5px;
+}
+
+.fakeInputPadding {
+    padding: 0.97rem 0;
+}
+
+.responsiveImage {
+    left: 0px !important;
+    top: 0px !important;
+    right: 0px !important;
+    bottom: 0px !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    box-sizing: border-box;
+    margin: auto;
+    padding: 2px !important;
+}
+
+.bigImage {
+    position: absolute !important;
+}
+
+.customGrid > div {
+    float: none !important;
+    display: inline-block !important;
+    position: relative;
+}
+
+.customGrid > div:first-child {
+    border: 1px solid var(--toolPageBlue);
+    height: 120px !important;
+    position: relative !important;
+}

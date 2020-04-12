@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta charset="UTF-8">
+		<title>app</title>
+
+		<script
+			id="sap-ui-bootstrap"
+			src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+			data-sap-ui-libs="sap.m"
+			data-sap-ui-theme="sap_bluecrystal"
+			data-sap-ui-compatVersion="edge"
+			data-sap-ui-resourceroots='{
+				"project.app": "./",
+				"project.app.mock": "service"
+			}'>
+		</script>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+
+		<script>
+			sap.ui.getCore().attachInit(function() {
+            	sap.ui.require([
+                	"project/app/service/mockserver",
+            	], function(mockserver) {
+                	mockserver.init();
+                	new sap.m.Shell("Shell",{
+                    	title:"Routing",
+                    	app: new sap.ui.core.ComponentContainer({
+                        	name : 'project.app'
+                    	})
+              		}).placeAt("content");
+				})	
+			});
+		</script>
+	</head>
+
+	<body class="sapUiBody" id="content">
+	</body>
+
+</html>
