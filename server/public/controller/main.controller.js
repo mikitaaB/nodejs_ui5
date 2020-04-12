@@ -106,12 +106,116 @@ sap.ui.define([
 			return this.getModel("config");
 		},
 
+		onLoginDialogCloseButtonPress: function() {
+			this.oLoginDialog.close();
+		},
+
+		signupDialogCloseButton: function() {
+			this.oSignupDialog.close();
+		},
+
+		onOpenLoginDialog: function() {
+			if (!this.oLoginDialog) {
+				var oView = this.getView();
+				var that = this;
+				Fragment.load({
+					"id": oView.getId(),
+					"name": "project.app.fragment.loginDialog",
+					"controller": that
+				}).then(function(oDialog) {
+					that.oLoginDialog = oDialog;
+					oView.addDependent(that.oLoginDialog);
+					that.oLoginDialog.setModel(new JSONModel({
+						"username": "",
+						"password": ""
+					}), "loginModel");
+					that.oLoginDialog.open();
+				});
+			} else {
+				this.oLoginDialog.open();
+			}
+		},
+
+		onLogin: function() {
+			this.showBusy(this.getConfigModel(), "loginDialog", 10, 0);
+			var oLoginData = this.oLoginDialog.getModel("loginModel").getData();
+			this.sentRequest("POST", "/users/login", {
+				username: oLoginData.username,
+				password: oLoginData.password
+			}).success(function() {
+				MessageToast.show(this.oBundle.getText("LOGIN_SUCCESS"));
+				this.oLoginDialog.close();
+			}).fail(function(oError) {
+				this.showRequestError(oError, "ERROR_PERSON_LOGIN", this.oBundle);
+			}).always(function() {
+				this.hideBusy(this.getConfigModel(), "loginDialog", 10);
+			});
+		},
+
+		onOpenSignupDialog: function() {
+			if (!this.oSignupDialog) {
+				var oView = this.getView();
+				var that = this;
+				Fragment.load({
+					"id": oView.getId(),
+					"name": "project.app.fragment.signupDialog",
+					"controller": that
+				}).then(function(oDialog) {
+					that.oSignupDialog = oDialog;
+					oView.addDependent(that.oSignupDialog);
+					that.oSignupDialog.setModel(new JSONModel({
+						"firstname": "",
+						"lastname": "",
+						"username": "",
+						"password": ""
+					}), "signupModel");
+					that.oSignupDialog.open();
+				});
+			} else {
+				this.oSignupDialog.open();
+			}
+		},
+
+		onSignup: function() {
+			this.showBusy(this.getConfigModel(), "signupDialog", 10, 0);
+			var oSignupData = this.oSignupDialog.getModel("signupModel").getData();
+			this.sentRequest("POST", "/users/signup", {
+				username: oSignupData.username,
+				firstname: oSignupData.firstname,
+				lastname: oSignupData.lastname,
+				password: oSignupData.password
+			}).success(function() {
+				MessageToast.show(this.oBundle.getText("SIGNUP_SUCCESS"));
+				this.oSignupDialog.close();
+			}).fail(function(oError) {
+				this.showRequestError(oError, "ERROR_PERSON_CREATE", this.oBundle);
+			}).always(function() {
+				this.hideBusy(this.getConfigModel(), "signupDialog", 10);
+			});
+		},
+
+		onLoginDialogAfterClose: function() {
+			this.oLoginDialog.setModel(new JSONModel({
+				"username": "",
+				"password": ""
+			}), "loginModel");
+		},
+
+		onSignupDialogAfterClose: function() {
+			this.oSignupDialog.setModel(new JSONModel({
+				"firstname": "",
+				"lastname": "",
+				"username": "",
+				"password": ""
+			}), "signupModel");
+		},
+
 		_initPersonalDataModel: function() {
 			this.showBusy(this.getConfigModel(), "idPersonTable", 10, 0);
 			this.sentRequest("GET", "/persons").success(function(aPersonal) {
 				this.setModel(new JSONModel(aPersonal), "personalModel");
 			}).fail(function(oError) {
-				this.showRequestError(oError, "errorProjectPageLoad", this.oBundle);
+				this.showRequestError(oError, "ERROR_MAINPAGE_LOAD", this.oBundle);
 			}).always(function() {
 				this.hideBusy(this.getConfigModel(), "idPersonTable", 10);
 			});

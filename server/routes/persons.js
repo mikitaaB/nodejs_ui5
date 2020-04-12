@@ -2,14 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Persons = require('../models/persons');
+const authenticate = require('../authenticate');
+
+const cors = require('./cors');
 
 const personsRouter = express.Router();
 
 personsRouter.use(bodyParser.json());
 
 personsRouter.route('/')
-.get((req,res,next) => {
-    Persons.find({})
+.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+.get(cors.cors, (req,res,next) => {
+    Persons.find(req.query)
     .then((persons) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -17,7 +21,7 @@ personsRouter.route('/')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.post((req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Persons.create(req.body)
     .then((person) => {
         res.statusCode = 200;
@@ -28,7 +32,8 @@ personsRouter.route('/')
 });
 
 personsRouter.route('/:personId')
-.get((req,res,next) => {
+.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
+.get(cors.cors, (req,res,next) => {
     Persons.findById(req.params.personId)
     .then((person) => {
         res.statusCode = 200;
@@ -37,7 +42,7 @@ personsRouter.route('/:personId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.put((req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Persons.findByIdAndUpdate(req.params.personId, {
         $set: req.body
     }, { new: true })
@@ -48,7 +53,7 @@ personsRouter.route('/:personId')
     }, (err) => next(err))
     .catch((err) => next(err));
 })
-.delete((req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Persons.findByIdAndRemove(req.params.personId)
     .then((resp) => {
         res.statusCode = 200;

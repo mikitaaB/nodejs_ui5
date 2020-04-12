@@ -1,0 +1,48 @@
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core">
+	<Dialog
+			id="loginDialog"
+			afterClose="onLoginDialogAfterClose"
+			contentHeight="auto"
+			contentWidth="100px">
+		<customHeader>
+			<Toolbar>
+				<ToolbarSpacer />
+				<Title
+						id="loginDialogTitle"
+						text="Login"
+						textAlign="Center" />
+				<ToolbarSpacer />
+				<Button
+						id="loginDialogCloseButton"
+						icon="sap-icon://decline"
+						press="onLoginDialogCloseButtonPress" />
+			</Toolbar>
+		</customHeader>
+		<content>
+            <VBox>
+                <Label
+                        class="sapUiSmallMarginTop"
+                        text="Username:" />
+                <Input
+                        id="usernameLogInput"
+                        value="{loginModel>/username}" />
+                <Label
+                        text="Password:" />
+                <Input
+                        id="passwordLogInput"
+                        class="sapUiSmallMarginBottom"
+                        type="Password"
+                        value="{loginModel>/password}" />
+            </VBox>
+		</content>
+		<buttons>
+			<Button
+					id="loginButton"
+					press="onLogin"
+					text="Login"
+					type="Transparent" />
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

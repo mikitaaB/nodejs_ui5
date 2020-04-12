@@ -19,20 +19,6 @@
 				    		id="idPersonTable"
 							items="{personalModel>/}"
 				    		noDataText="Nothing">
-				        <items>
-				            <ColumnListItem type="Active">
-				                <cells>
-				                    <Text text="{personalModel>firstName}" />
-				                    <Text text="{personalModel>middleName}" />
-				                    <Text text="{personalModel>lastName}" />
-				                    <Text text="{personalModel>post}" />
-				                    <Text text="{personalModel>number}" />
-				                    <Text text="{personalModel>address}" />
-				                    <core:Icon class="icon" press="onEdit" size="1.8rem" src="sap-icon://edit" />
-	                                <core:Icon class="icon" press="onRemove" size="1.8rem" src="sap-icon://decline" />
-				                </cells>
-				            </ColumnListItem>
-				        </items>
 				        <columns>
 				            <Column>
 				                <header>
@@ -67,9 +53,31 @@
 				            <Column vAlign="Middle" width="45px" />
 	                        <Column vAlign="Middle" width="45px" />
 				    	</columns>
+						<items>
+				            <ColumnListItem type="Active">
+				                <cells>
+				                    <Text text="{personalModel>firstName}" />
+				                    <Text text="{personalModel>middleName}" />
+				                    <Text text="{personalModel>lastName}" />
+				                    <Text text="{personalModel>post}" />
+				                    <Text text="{personalModel>number}" />
+				                    <Text text="{personalModel>address}" />
+				                    <core:Icon class="icon" press="onEdit" size="1.8rem" src="sap-icon://edit" />
+	                                <core:Icon class="icon" press="onRemove" size="1.8rem" src="sap-icon://decline" />
+				                </cells>
+				            </ColumnListItem>
+				        </items>
 					</Table>
 				</content>
 			<headerContent>
+				<Button
+						id="signUpButton"
+						press="onOpenSignupDialog"
+						text="{i18n>SIGN_UP}" />
+				<Button
+						id="logInButton"
+						press="onOpenLoginDialog"
+						text="{i18n>LOG_IN}" />
 			    <Button
 						id="addPersonButton"
 						icon="sap-icon://add"

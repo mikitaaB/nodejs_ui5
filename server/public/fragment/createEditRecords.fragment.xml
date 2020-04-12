@@ -1,0 +1,98 @@
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core">
+	<Dialog
+			id="createEditRecordsDialog"
+            afterClose="onCreateEditRecordsDialogAfterClose"
+			contentHeight="auto"
+			contentWidth="100px">
+		<customHeader>
+			<Toolbar>
+				<ToolbarSpacer />
+				<Title
+						id="createEditRecordsDialogTitle"
+						text="Sign up"
+						textAlign="Center" />
+				<ToolbarSpacer />
+				<Button
+						id="createEditRecordsDialogCloseButton"
+						icon="sap-icon://decline"
+						press="onCreateEditRecordsDialogCloseButtonPress" />
+			</Toolbar>
+		</customHeader>
+		<content>
+            <f:SimpleForm
+                    id="idPersonForm"
+                    columnsL="1"
+                    columnsM="1"
+                    editable="true"
+                    labelSpanL="3"
+                    labelSpanM="3"
+                    layout="ResponsiveLayout"
+                    emptySpanL="4"
+                    emptySpanM="4"
+                    width="100%">
+                <Label
+                        id="label0"
+                        text="{i18n>FIRST_NAME}"
+                        vAlign="Middle"
+                        required="true" />
+                <Input
+                        id="idFirstName"
+                        value="{data>/firstName}" />
+
+                <Label
+                        id="label_1"
+                        text="{i18n>MIDDLE_NAME}"
+                        vAlign="Middle"
+                        required="true" />
+                <Input
+                        id="idMiddleName"
+                        value="{data>/middleName}" />
+
+                <Label
+                        id="label1"
+                        text="{i18n>LAST_NAME}"
+                        vAlign="Middle"
+                        required="true" />
+                <Input
+                        id="idLastName"
+                        value="{data>/lastName}" />
+
+                <Label
+                        id="label2"
+                        text="{i18n>POSITION}"
+                        vAlign="Middle" />
+                <Input
+                        id="idPosition"
+                        value="{data>/post}" />
+
+                <Label
+                        id="label3"
+                        text="{i18n>PHONE}"
+                        vAlign="Middle" />
+                <Input
+                        id="idPhone"
+                        value="{data>/number}" />
+
+                <Label
+                        id="label4"
+                        text="{i18n>ADDRESS}"
+                        vAlign="Middle" />
+                <Input
+                        id="idAddress"
+                        value="{data>/address}" />
+            </f:SimpleForm>
+		</content>
+		<buttons>
+			<Button
+                    class="fieldDeletePopupButton"
+                    press="onSave"
+                    text="{i18n>SAVE}" />
+            <Button
+                    class="fieldDeletePopupButton"
+                    press="onNavBack"
+                    text="{i18n>CANCEL}" />
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,60 @@
+<core:FragmentDefinition
+		xmlns="sap.m"
+		xmlns:core="sap.ui.core">
+	<Dialog
+			id="signupDialog"
+            afterClose="onSignupDialogAfterClose"
+			contentHeight="auto"
+			contentWidth="100px">
+		<customHeader>
+			<Toolbar>
+				<ToolbarSpacer />
+				<Title
+						id="signupDialogTitle"
+						text="Sign up"
+						textAlign="Center" />
+				<ToolbarSpacer />
+				<Button
+						id="signupDialogCloseButton"
+						icon="sap-icon://decline"
+						press="onSignupDialogCloseButtonPress" />
+			</Toolbar>
+		</customHeader>
+		<content>
+            <VBox>
+                <Label
+                        class="sapUiSmallMarginTop"
+                        text="Username:" />
+                <Input
+                        id="usernameInput"
+                        value="{signupModel>/username}" />
+                <Label
+                        class="sapUiSmallMarginTop"
+                        text="First name:" />
+                <Input
+                        id="firstNameInput"
+                        value="{signupModel>/firstname}" />
+                <Label
+                        class="sapUiSmallMarginTop"
+                        text="Last name:" />
+                <Input
+                        id="lastNameInput"
+                        value="{signupModel>/lastname}" />
+                <Label
+                        text="Password:" />
+                <Input
+                        id="passwordInput"
+                        class="sapUiSmallMarginBottom"
+                        type="Password"
+                        value="{signupModel>/password}" />
+            </VBox>
+		</content>
+		<buttons>
+			<Button
+					id="signupButton"
+					press="onSignup"
+					text="Sign up"
+					type="Transparent" />
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
