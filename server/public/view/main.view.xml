@@ -8,6 +8,7 @@
 			id="idAppControl">
 		<pages>
 			<Page
+					id="mainPage"
 					title="{i18n>title}">
 				<content>
 				    <SearchField
@@ -78,6 +79,11 @@
 						id="logInButton"
 						press="onOpenLoginDialog"
 						text="{i18n>LOG_IN}" />
+				<Button
+						id="logOutButton"
+						press="onLogout"
+						text="{i18n>LOG_OUT}"
+						visible="false" />
 			    <Button
 						id="addPersonButton"
 						icon="sap-icon://add"

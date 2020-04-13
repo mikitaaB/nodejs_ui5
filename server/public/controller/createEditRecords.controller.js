@@ -21,11 +21,18 @@ sap.ui.define([
 			};
 			this.model = this.getOwnerComponent().getModel();
 			this.oPersonalModel = this.getOwnerComponent().getModel("personalModel");
+			this.oEventBus = sap.ui.getCore().getEventBus();
+			this.oEventBus.subscribe("person", "token", this.getToken, this);
 			this._oRouter = UIComponent.getRouterFor(this);
 			this._oRouter.getRoute("createEditRecords").attachPatternMatched(this._onRouteMatched, this);
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.setModel(Models.createEditPageConfigModel(), "config");
 			this.aValidProps = ["firstName", "middleName", "lastName"];
+			this.token = "";
+		},
+
+		getToken: function(sChannel, sEvent, sToken) {
+			this.token = sToken;
 		},
 
 		onSave: function () {

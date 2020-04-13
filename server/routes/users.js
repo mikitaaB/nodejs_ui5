@@ -70,7 +70,7 @@ router.post('/login', cors.corsWithOptions, (req, res, next) => {
       if (err) {
         res.statusCode = 401;
         res.setHeader('Content-Type', 'application/json');
-        res.json({success: false, status: 'Login Unsuccessful!', err: 'Could not log in user!'});          
+        res.json({success: false, status: 'Login Unsuccessful!', err: 'Could not log in user!'});
       }
       var token = authenticate.getToken({_id: req.user._id});
       res.statusCode = 200;
@@ -80,7 +80,7 @@ router.post('/login', cors.corsWithOptions, (req, res, next) => {
   }) (req, res, next);
 });
 
-router.get('/logout', cors.corsWithOptions, (req, res) => {
+router.get('/logout', cors.corsWithOptions, (req, res, next) => {
   if (req.session) {
     req.session.destroy();
     res.clearCookie('session-id');

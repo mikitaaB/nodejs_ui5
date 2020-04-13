@@ -13,10 +13,12 @@ sap.ui.define([
 	return BaseController.extend("project.app.controller.main", {
 		onInit: function () {
 			this.model = this.getOwnerComponent().getModel();
+			this.oEventBus = sap.ui.getCore().getEventBus();
 			this._oRouter = this.getOwnerComponent().getRouter();
 			this._oRouter.getRoute("mainPage").attachPatternMatched(this._initPersonalDataModel, this);
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.setModel(Models.createMainPageConfigModel(this.oBundle), "config");
+			this.token = 0;
 			this._initPersonalDataModel();
 		},
 
@@ -88,7 +90,8 @@ sap.ui.define([
 
 		onAdd: function () {
 			this.getView().setModel(new JSONModel({}), "PersonModel");
-            this._oRouter.navTo("createEditRecords", {Mode: "create"});
+			this._oRouter.navTo("createEditRecords", {Mode: "create"});
+			this.oEventBus.publish("person", "token", this.token);
 		},
 
 		onEdit: function(oEvent) {
@@ -100,6 +103,7 @@ sap.ui.define([
 				Mode: "edit",
 				Id: oPerson._id
 			});
+			this.oEventBus.publish("person", "token", this.token);
 		},
 
 		getConfigModel: function() {
@@ -136,22 +140,6 @@ sap.ui.define([
 			}
 		},
 
-		onLogin: function() {
-			this.showBusy(this.getConfigModel(), "loginDialog", 10, 0);
-			var oLoginData = this.oLoginDialog.getModel("loginModel").getData();
-			this.sentRequest("POST", "/users/login", {
-				username: oLoginData.username,
-				password: oLoginData.password
-			}).success(function() {
-				MessageToast.show(this.oBundle.getText("LOGIN_SUCCESS"));
-				this.oLoginDialog.close();
-			}).fail(function(oError) {
-				this.showRequestError(oError, "ERROR_PERSON_LOGIN", this.oBundle);
-			}).always(function() {
-				this.hideBusy(this.getConfigModel(), "loginDialog", 10);
-			});
-		},
-
 		onOpenSignupDialog: function() {
 			if (!this.oSignupDialog) {
 				var oView = this.getView();
@@ -176,6 +164,25 @@ sap.ui.define([
 			}
 		},
 
+		onLogin: function() {
+			this.showBusy(this.getConfigModel(), "loginDialog", 10, 0);
+			var oLoginData = this.oLoginDialog.getModel("loginModel").getData();
+			this.sentRequest("POST", "/users/login", {
+				username: oLoginData.username,
+				password: oLoginData.password
+			}).success(function(oPerson) {
+				this.token = oPerson.token;
+				MessageToast.show(this.oBundle.getText("LOGIN_SUCCESS"));
+				this.oLoginDialog.close();
+				this.byId("logInButton").setVisible(false);
+				this.byId("logOutButton").setVisible(true);
+			}).fail(function(oError) {
+				this.showRequestError(oError, "ERROR_PERSON_LOGIN", this.oBundle);
+			}).always(function() {
+				this.hideBusy(this.getConfigModel(), "loginDialog", 10);
+			});
+		},
+
 		onSignup: function() {
 			this.showBusy(this.getConfigModel(), "signupDialog", 10, 0);
 			var oSignupData = this.oSignupDialog.getModel("signupModel").getData();
@@ -191,6 +198,19 @@ sap.ui.define([
 				this.showRequestError(oError, "ERROR_PERSON_CREATE", this.oBundle);
 			}).always(function() {
 				this.hideBusy(this.getConfigModel(), "signupDialog", 10);
+			});
+		},
+
+		onLogout: function() {
+			this.showBusy(this.getConfigModel(), "mainPage", 10, 0);
+			this.sentRequest("GET", "/users/logout", {}).success(function() {
+				MessageToast.show(this.oBundle.getText("LOGOUT_SUCCESS"));
+				this.byId("logInButton").setVisible(true);
+				this.byId("logOutButton").setVisible(false);
+			}).fail(function(oError) {
+				this.showRequestError(oError, "ERROR_LOGOUT", this.oBundle);
+			}).always(function() {
+				this.hideBusy(this.getConfigModel(), "mainPage", 10);
 			});
 		},
 

@@ -64,6 +64,7 @@ sap.ui.define([
 			var promise = jQuery.ajax({
 				"url": sUrl,
 				"method": sMethod,
+				"headers": { Authorization: "Bearer " + this.token },
 				"data": sMethod.toUpperCase().indexOf("GET") === 0 ? oData : JSON.stringify(oData),
 				"contentType": "application/json;charset=UTF-8",
 				"context": this
