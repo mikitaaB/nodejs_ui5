@@ -18,7 +18,7 @@ sap.ui.define([
 			this._oRouter.getRoute("mainPage").attachPatternMatched(this._initPersonalDataModel, this);
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.setModel(Models.createMainPageConfigModel(this.oBundle), "config");
-			this.token = 0;
+			this.token = "";
 			this._initPersonalDataModel();
 		},
 
@@ -37,36 +37,6 @@ sap.ui.define([
 				});
 			}
 			oBinding.filter(oFilters, FilterType.Application);
-		},
-
-		onRemove: function (oEvent) {
-			var oBindingContext = oEvent.getSource().getBindingContext("personalModel");
-			var oModel = oBindingContext.getModel();
-			var sPath = oBindingContext.getPath();
-			var oPerson = oModel.getProperty(sPath);
-			var iPersonId = oPerson._id;
-			this.showBusy(this.getConfigModel(), "idPersonTable", 10, 0);
-			var that = this;
-			this.showConfirmDialog(this.oBundle.getText("CONFIRM_PERSON_DELETE")).then(function() {
-				that.sentRequest("DELETE", "/persons/" + iPersonId, {}).success(function() {
-					var oPersonalModel = that.getModel("personalModel");
-					var aPersonal = oPersonalModel.getData();
-					var iPersonalLength = aPersonal.length;
-					for (var i = 0; i < iPersonalLength; i++) {
-						if (aPersonal[i]["_id"] === iPersonId) {
-							aPersonal.splice(i, 1);
-							oPersonalModel.refresh();
-						}
-					}
-					MessageToast.show(this.oBundle.getText("PERSON_DELETE_SUCCESS"));
-				}).fail(function(oError) {
-					that.showRequestError(oError, "ERROR_PERSON_DELETE", that.oBundle);
-				}).always(function() {
-					that.hideBusy(that.getConfigModel(), "idPersonTable", 10);
-				});
-			}, function() {
-				that.hideBusy(that.getConfigModel(), "idPersonTable", 10);
-			});
 		},
 
 		showConfirmDialog: function(sMessage) {
@@ -91,7 +61,7 @@ sap.ui.define([
 		onAdd: function () {
 			this.getView().setModel(new JSONModel({}), "PersonModel");
 			this._oRouter.navTo("createEditRecords", {Mode: "create"});
-			this.oEventBus.publish("person", "token", this.token);
+			this.oEventBus.publish("person", "token", {token: this.token});
 		},
 
 		onEdit: function(oEvent) {
@@ -104,18 +74,6 @@ sap.ui.define([
 				Id: oPerson._id
 			});
 			this.oEventBus.publish("person", "token", this.token);
-		},
-
-		getConfigModel: function() {
-			return this.getModel("config");
-		},
-
-		onLoginDialogCloseButtonPress: function() {
-			this.oLoginDialog.close();
-		},
-
-		signupDialogCloseButton: function() {
-			this.oSignupDialog.close();
 		},
 
 		onOpenLoginDialog: function() {
@@ -212,6 +170,48 @@ sap.ui.define([
 			}).always(function() {
 				this.hideBusy(this.getConfigModel(), "mainPage", 10);
 			});
+		},
+
+		onRemove: function (oEvent) {
+			var oBindingContext = oEvent.getSource().getBindingContext("personalModel");
+			var oModel = oBindingContext.getModel();
+			var sPath = oBindingContext.getPath();
+			var oPerson = oModel.getProperty(sPath);
+			var iPersonId = oPerson._id;
+			this.showBusy(this.getConfigModel(), "idPersonTable", 10, 0);
+			var that = this;
+			this.showConfirmDialog(this.oBundle.getText("CONFIRM_PERSON_DELETE")).then(function() {
+				that.sentRequest("DELETE", "/persons/" + iPersonId, {}).success(function() {
+					var oPersonalModel = that.getModel("personalModel");
+					var aPersonal = oPersonalModel.getData();
+					var iPersonalLength = aPersonal.length;
+					for (var i = 0; i < iPersonalLength; i++) {
+						if (aPersonal[i]["_id"] === iPersonId) {
+							aPersonal.splice(i, 1);
+							oPersonalModel.refresh();
+						}
+					}
+					MessageToast.show(this.oBundle.getText("PERSON_DELETE_SUCCESS"));
+				}).fail(function(oError) {
+					that.showRequestError(oError, "ERROR_PERSON_DELETE", that.oBundle);
+				}).always(function() {
+					that.hideBusy(that.getConfigModel(), "idPersonTable", 10);
+				});
+			}, function() {
+				that.hideBusy(that.getConfigModel(), "idPersonTable", 10);
+			});
+		},
+
+		getConfigModel: function() {
+			return this.getModel("config");
+		},
+
+		onLoginDialogCloseButtonPress: function() {
+			this.oLoginDialog.close();
+		},
+
+		signupDialogCloseButton: function() {
+			this.oSignupDialog.close();
 		},
 
 		onLoginDialogAfterClose: function() {

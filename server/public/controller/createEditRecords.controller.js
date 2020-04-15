@@ -15,6 +15,10 @@ sap.ui.define([
 				"firstName": "",
 				"middleName": "",
 				"lastName": "",
+				"image": {
+					"MimeType": "",
+        			"OriginalSize": 0
+				},
 				"post": "",
 				"number": "",
 				"address": ""
@@ -29,10 +33,13 @@ sap.ui.define([
 			this.setModel(Models.createEditPageConfigModel(), "config");
 			this.aValidProps = ["firstName", "middleName", "lastName"];
 			this.token = "";
+			this._photoTemp = {
+				orig: ""
+			};
 		},
 
-		getToken: function(sChannel, sEvent, sToken) {
-			this.token = sToken;
+		getToken: function(sChannel, sEvent, oData) {
+			this.token = oData.token;
 		},
 
 		onSave: function () {
@@ -45,16 +52,25 @@ sap.ui.define([
 			if (this.sMode === "create") {
 				var sPath = "/persons";
 				this.showBusy(this.getConfigModel(), "idPersonForm", 10, 0);
-				this.sentRequest("POST", sPath, {
-					firstName: oPersonData.firstName,
-					middleName: oPersonData.middleName,
-					lastName: oPersonData.lastName,
-					post: oPersonData.post,
-					number: oPersonData.number,
-					address: oPersonData.address,
-				}).success(function() {
-					MessageToast.show(this.oBundle.getText("RECORD_ADD_SUCCESS"));
-					this.onNavBack();
+				if (oPersonData.image) {
+					if (this._photoTemp.orig != "") {
+						var photoData = {
+							original: this._photoTemp.orig
+						};
+					}
+				}
+				this.sentRequest("POST", sPath, oPersonData).success(function() {
+					if (this._photoTemp.orig != "") {
+						this.sentRequest("POST", "/imageUpload", photoData).success(function() {
+							MessageToast.show(this.oBundle.getText("RECORD_ADD_SUCCESS"));
+							this.onNavBack();
+						}).fail(function(oError) {
+							this.showRequestError(oError, "ERROR_PERSON_CREATE", this.oBundle);
+						});
+					} else {
+						MessageToast.show(this.oBundle.getText("RECORD_ADD_SUCCESS"));
+						this.onNavBack();
+					}
 				}).fail(function(oError) {
 					this.showRequestError(oError, "ERROR_PERSON_CREATE", this.oBundle);
 				}).always(function() {
@@ -78,6 +94,36 @@ sap.ui.define([
 				}).always(function() {
 					this.hideBusy(this.getConfigModel(), "idPersonForm", 10);
 				});
+			}
+		},
+
+		onTypeMissmatch: function () {
+			var sMsg = this._oBundle.getText("GENERAL_IMAGE_UPLOAD_EXTENTION", [this.byId("idFileUploader").getFileType()]);
+			MessageToast.show(sMsg);
+		},
+
+		onPhotoChange: function(oEvent) {
+			var oFile = oEvent.getParameter("files")[0];
+			var oPhoto = this.getModel("data").getProperty("/image");
+			if (oPhoto === undefined || oPhoto === null) {
+				oPhoto = {};
+				this.getModel("data").setProperty("/image", oPhoto);
+			}
+			// var sPath = URL.createObjectURL(oFile);
+			// this.byId("idImage").setSrc(sPath);
+
+			oPhoto.MimeType = oFile.type;
+			oPhoto.OriginalSize = 0;
+
+			var oReader = new FileReader();
+			var that = this;
+			oReader.onloadend = function () {
+				that.byId("idImage").setSrc(oReader.result);
+				that._photoTemp.orig = oReader.result;
+				oPhoto.OriginalSize = oReader.result.length;
+			};
+			if (oFile) {
+				oReader.readAsDataURL(oFile);
 			}
 		},
 
