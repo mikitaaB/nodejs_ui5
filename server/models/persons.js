@@ -15,10 +15,6 @@ const personSchema = new Schema({
         type: String,
         required: true
     },
-    image: {
-        MimeType: String,
-        OriginalSize: Number
-    },
     post: {
         type: String
     },
