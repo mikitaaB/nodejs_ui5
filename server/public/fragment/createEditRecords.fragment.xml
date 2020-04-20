@@ -39,7 +39,7 @@
                         required="true" />
                 <Input
                         id="idFirstName"
-                        value="{data>/firstName}" />
+                        value="{data>/firstname}" />
 
                 <Label
                         id="label_1"
@@ -48,7 +48,7 @@
                         required="true" />
                 <Input
                         id="idMiddleName"
-                        value="{data>/middleName}" />
+                        value="{data>/middlename}" />
 
                 <Label
                         id="label1"
@@ -57,7 +57,7 @@
                         required="true" />
                 <Input
                         id="idLastName"
-                        value="{data>/lastName}" />
+                        value="{data>/lastname}" />
 
                 <Label
                         id="label2"
@@ -73,7 +73,7 @@
                         vAlign="Middle" />
                 <Input
                         id="idPhone"
-                        value="{data>/number}" />
+                        value="{data>/phone}" />
 
                 <Label
                         id="label4"
@@ -86,13 +86,13 @@
 		</content>
 		<buttons>
 			<Button
-                    class="fieldDeletePopupButton"
-                    press="onSave"
-                    text="{i18n>SAVE}" />
-            <Button
-                    class="fieldDeletePopupButton"
-                    press="onNavBack"
-                    text="{i18n>CANCEL}" />
+                                class="fieldDeletePopupButton"
+                                press="onSave"
+                                text="{i18n>SAVE}" />
+                        <Button
+                                class="fieldDeletePopupButton"
+                                press="onNavBack"
+                                text="{i18n>CANCEL}" />
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

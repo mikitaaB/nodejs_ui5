@@ -30,8 +30,8 @@
 								vAlign="Middle"
 								required="true" />
 				        <Input
-								id="idFirstName"
-								value="{data>/firstName}" />
+								id="idFirstname"
+								value="{data>/firstname}" />
 
 				        <Label
 								id="label_1"
@@ -39,8 +39,8 @@
 								vAlign="Middle"
 								required="true" />
 				        <Input
-								id="idMiddleName"
-								value="{data>/middleName}" />
+								id="idMiddlename"
+								value="{data>/middlename}" />
 
 				        <Label
 								id="label1"
@@ -48,8 +48,8 @@
 								vAlign="Middle"
 								required="true" />
 				        <Input
-								id="idLastName"
-								value="{data>/lastName}" />
+								id="idLastname"
+								value="{data>/lastname}" />
 
 				        <Label
 								id="label2"
@@ -65,7 +65,7 @@
 								vAlign="Middle" />
 				        <Input
 								id="idPhone"
-								value="{data>/number}" />
+								value="{data>/phone}" />
 
 				        <Label
 								id="label4"

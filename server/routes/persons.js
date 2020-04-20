@@ -1,66 +1,97 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const Persons = require('../models/persons');
-const authenticate = require('../authenticate');
+const db = require("../db");
 
-const cors = require('./cors');
+exports.getPersons = (req, res, next) => {
+    db.connect(function (err, client, done) {
+        if (err) {
+            console.log("Can not connect to the DB" + err);
+            return next(err);
+        }
+        client.query('SELECT * FROM public.persons;', function (err, result) {
+            done();
+            if (err) {
+                console.log(err);
+                res.status(400).send(err);
+                return next(err);
+            }
+            res.status(200).json(result.rows);
+        })
+    });
+};
 
-const personsRouter = express.Router();
+exports.getPersonById = (req, res) => {
+    const id = parseInt(req.params.id);
+    db.connect(function (err, client, done) {
+        if (err) {
+            console.log("Can not connect to the DB" + err);
+            return next(err);
+        }
+        client.query('SELECT * FROM public.persons WHERE id = $1;', [id], function (err, result) {
+            done();
+            if (err) {
+                console.log(err);
+                res.status(400).send(err);
+                return next(err);
+            }
+            res.status(200).json(result.rows[0]);
+        })
+    });
+};
 
-personsRouter.use(bodyParser.json());
+exports.postPerson = (req, res) => {
+    var cols = [req.body.firstname, req.body.middlename, req.body.lastname, req.body.post, req.body.phone, req.body.address];
+    db.connect(function (err, client, done) {
+        if (err) {
+            console.log("Can not connect to the DB" + err);
+            return next(err);
+        }
+        client.query('INSERT INTO public.persons(firstname, middlename, lastname, post, phone, address) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;', cols, function (err, result) {
+            done();
+            if (err) {
+                console.log("Error inserting : %s", err);
+                res.status(400).send(err);
+                return next(err);
+            }
+            res.status(200).json(result.rows);
+        })
+    });
+};
 
-personsRouter.route('/')
-.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
-.get(cors.cors, (req,res,next) => {
-    Persons.find(req.query)
-    .then((persons) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(persons);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    Persons.create(req.body)
-    .then((person) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(person);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-});
+exports.putPerson = (req, res) => {
+    var cols = [req.body.firstname, req.body.middlename, req.body.lastname, req.body.post, req.body.phone, req.body.address, req.params.id];
+    db.connect(function (err, client, done) {
+        if (err) {
+            console.log("Can not connect to the DB" + err);
+            return next(err);
+        }
+        client.query('UPDATE public.persons SET firstname=$1, middlename=$2, lastname=$3, post=$4, phone=$5, address=$6 WHERE id=$7',
+            cols,
+            function (err, result) {
+                done();
+                if (err) {
+                    console.log("Error updating : %s", err);
+                    res.status(400).send(err);
+                    return next(err);
+                }
+                res.status(200).json(result.rows);
+        })
+    });
+};
 
-personsRouter.route('/:personId')
-.options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
-.get(cors.cors, (req,res,next) => {
-    Persons.findById(req.params.personId)
-    .then((person) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(person);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    Persons.findByIdAndUpdate(req.params.personId, {
-        $set: req.body
-    }, { new: true })
-    .then((person) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(person);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-})
-.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    Persons.findByIdAndRemove(req.params.personId)
-    .then((resp) => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(resp);
-    }, (err) => next(err))
-    .catch((err) => next(err));
-});
-
-module.exports = personsRouter;
+exports.deletePerson = (req, res) => {
+    const id = req.params.id;
+    db.connect(function (err, client, done) {
+        if (err) {
+            console.log('Can not connect to the DB' + err);
+            return next(err);
+        }
+        client.query('DELETE FROM public.persons WHERE id = $1;', [id], function (err) {
+            done();
+            if (err) {
+                console.log("Error deleting : %s", err);
+                res.status(400).send(err);
+                return next(err);
+            }
+            res.status(200).json({ message: "Deleted" });
+        })
+    });
+};

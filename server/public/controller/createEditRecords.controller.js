@@ -12,11 +12,11 @@ sap.ui.define([
 	return BaseController.extend("project.app.controller.createEditRecords", {
 		onInit: function () {
 			this.oInitData = {
-				"firstName": "",
-				"middleName": "",
-				"lastName": "",
+				"firstname": "",
+				"middlename": "",
+				"lastname": "",
 				"post": "",
-				"number": "",
+				"phone": "",
 				"address": ""
 			};
 			this.model = this.getOwnerComponent().getModel();
@@ -27,7 +27,7 @@ sap.ui.define([
 			this._oRouter.getRoute("createEditRecords").attachPatternMatched(this._onRouteMatched, this);
 			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 			this.setModel(Models.createEditPageConfigModel(), "config");
-			this.aValidProps = ["firstName", "middleName", "lastName"];
+			this.aValidProps = ["firstname", "middlename", "lastname"];
 			this.token = "";
 		},
 
@@ -54,16 +54,9 @@ sap.ui.define([
 					this.hideBusy(this.getConfigModel(), "idPersonForm", 10);
 				});
 			} else {
-				var sPath = "/persons/" + oPersonData._id;
+				var sPath = "/persons/" + oPersonData.id;
 				this.showBusy(this.getConfigModel(), "idPersonForm", 10, 0);
-				this.sentRequest("PUT", sPath, {
-					firstName: oPersonData.firstName,
-					middleName: oPersonData.middleName,
-					lastName: oPersonData.lastName,
-					post: oPersonData.post,
-					number: oPersonData.number,
-					address: oPersonData.address,
-				}).success(function() {
+				this.sentRequest("PUT", sPath, oPersonData).success(function() {
 					MessageToast.show(this.oBundle.getText("RECORD_EDIT_SUCCESS"));
 					this.onNavBack();
 				}).fail(function(oError) {

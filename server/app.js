@@ -7,27 +7,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require("body-parser");
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
+var cors = require("cors");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var personsRouter = require("./routes/persons");
 var uploadRouter = require('./routes/uploadRouter');
-var config = require('./config');
 
 var passport = require('passport');
 var authenticate = require('./authenticate');
-
-// Connection URL
-const url = config.mongoUrl;
-const connect = mongoose.connect(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
-});
-
-connect.then((db) => {
-  console.log("Connected correctly to server");
-}, (err) => { console.log(err); });
 
 var app = express();
 
@@ -36,9 +24,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/persons', personsRouter.getPersons);
+app.get('/persons/:id', personsRouter.getPersonById);
+app.post('/persons', personsRouter.postPerson);
+app.put('/persons/:id', personsRouter.putPerson);
+app.delete('/persons/:id', personsRouter.deletePerson);
 
 app.use(session({
   name: 'session-id',
@@ -51,9 +52,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', indexRouter);
+// app.use('/persons', personsRouter);
 app.use('/users', usersRouter);
-app.use('/persons', personsRouter);
+app.use('/', indexRouter);
 app.use('/imageUpload',uploadRouter);
 
 // catch 404 and forward to error handler

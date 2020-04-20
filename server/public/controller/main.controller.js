@@ -71,7 +71,7 @@ sap.ui.define([
 			var oPerson = this.getModelProperty("personalModel", sPath);
     		this._oRouter.navTo("createEditRecords", {
 				Mode: "edit",
-				Id: oPerson._id
+				Id: oPerson.id
 			});
 			this.oEventBus.publish("person", "token", this.token);
 		},
@@ -177,7 +177,7 @@ sap.ui.define([
 			var oModel = oBindingContext.getModel();
 			var sPath = oBindingContext.getPath();
 			var oPerson = oModel.getProperty(sPath);
-			var iPersonId = oPerson._id;
+			var iPersonId = oPerson.id;
 			this.showBusy(this.getConfigModel(), "idPersonTable", 10, 0);
 			var that = this;
 			this.showConfirmDialog(this.oBundle.getText("CONFIRM_PERSON_DELETE")).then(function() {
@@ -186,7 +186,7 @@ sap.ui.define([
 					var aPersonal = oPersonalModel.getData();
 					var iPersonalLength = aPersonal.length;
 					for (var i = 0; i < iPersonalLength; i++) {
-						if (aPersonal[i]["_id"] === iPersonId) {
+						if (aPersonal[i]["id"] === iPersonId) {
 							aPersonal.splice(i, 1);
 							oPersonalModel.refresh();
 						}

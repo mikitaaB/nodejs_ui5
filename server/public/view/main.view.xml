@@ -23,32 +23,32 @@
 				        <columns>
 				            <Column>
 				                <header>
-				                    <Label text="{i18n>FIRST_NAME}" id="label0" />
+				                    <Label text="{i18n>FIRST_NAME}" />
 				                </header>
 				            </Column>
 				            <Column>
 				                <header>
-				                    <Label text="{i18n>MIDDLE_NAME}" id="label1" />
+				                    <Label text="{i18n>MIDDLE_NAME}" />
 				                </header>
 				            </Column>
 				            <Column>
 				                <header>
-				                    <Label text="{i18n>LAST_NAME}" id="label2" />
+				                    <Label text="{i18n>LAST_NAME}" />
 				                </header>
 				            </Column>
 				            <Column>
 				                <header>
-				                    <Label text="{i18n>POSITION}" id="label3" />
+				                    <Label text="{i18n>POSITION}" />
 				                </header>
 				            </Column>
 				            <Column>
 				                <header>
-				                    <Label text="{i18n>PHONE}" id="label4" />
+				                    <Label text="{i18n>PHONE}" />
 				                </header>
 				            </Column>
 				            <Column>
 				                <header>
-				                    <Label text="{i18n>ADDRESS}" id="label5" />
+				                    <Label text="{i18n>ADDRESS}" />
 				                </header>
 				            </Column>
 				            <Column vAlign="Middle" width="45px" />
@@ -57,11 +57,11 @@
 						<items>
 				            <ColumnListItem type="Active">
 				                <cells>
-				                    <Text text="{personalModel>firstName}" />
-				                    <Text text="{personalModel>middleName}" />
-				                    <Text text="{personalModel>lastName}" />
+				                    <Text text="{personalModel>firstname}" />
+				                    <Text text="{personalModel>middlename}" />
+				                    <Text text="{personalModel>lastname}" />
 				                    <Text text="{personalModel>post}" />
-				                    <Text text="{personalModel>number}" />
+				                    <Text text="{personalModel>phone}" />
 				                    <Text text="{personalModel>address}" />
 				                    <core:Icon class="icon" press="onEdit" size="1.8rem" src="sap-icon://edit" />
 	                                <core:Icon class="icon" press="onRemove" size="1.8rem" src="sap-icon://decline" />
