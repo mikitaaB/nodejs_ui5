@@ -6,6 +6,8 @@ var User = require('../models/user');
 var authenticate = require('../authenticate');
 var cors = require('./cors');
 
+const db = require("../db");
+
 router.use(bodyParser.json());
 
 router.options('*', cors.corsWithOptions, (req, res) => { res.sendStatus(200); } );
