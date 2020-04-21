@@ -3,7 +3,9 @@
 		displayBlock="true"
 		xmlns="sap.m"
 		xmlns:f="sap.ui.layout.form"
-		xmlns:mvc="sap.ui.core.mvc">
+		xmlns:l="sap.ui.layout"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns:u="sap.ui.unified">
 	<App
 			id="idAppControl">
 		<pages>
@@ -13,6 +15,32 @@
 					navButtonPress="onNavBack"
 					title="{i18n>title}">
 				<content>
+					<l:Grid
+                            class="customGrid"
+                            hSpacing="0"
+                            vSpacing="0">
+                        <Image
+                                id="idImage"
+                                class="responsiveImage bigImage"
+								src="{= ${data>/image} ? ${data>/image} : '/photos/anonym.jpg'}">
+                            <layoutData>
+                                <l:GridData
+										indent="XL2 L2 M2 S2"
+                                        span="XL4 L4 M4 S4" />
+                            </layoutData>
+                        </Image>
+						<u:FileUploader
+								id="idFileUploader"
+								buttonOnly="true"
+                                buttonText="{= ${data>/image} ? ${i18n>CHANGE_PHOTO} : ${i18n>ADD_PHOTO} }"
+								change="onPhotoChange"
+								fileType="jpg,png,jpeg,bmp"
+                                name="image_file"
+								sendXHR="true"
+								typeMissmatch="onTypeMissmatch"
+								tooltip="Upload your file to the local server"
+								uploadComplete="handlePhotoChange" />
+                    </l:Grid>
 				    <f:SimpleForm
 							id="idPersonForm"
 							columnsL="1"

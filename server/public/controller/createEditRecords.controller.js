@@ -17,7 +17,8 @@ sap.ui.define([
 				"lastname": "",
 				"post": "",
 				"phone": "",
-				"address": ""
+				"address": "",
+				"image": ""
 			};
 			this.model = this.getOwnerComponent().getModel();
 			this.oPersonalModel = this.getOwnerComponent().getModel("personalModel");
@@ -29,6 +30,7 @@ sap.ui.define([
 			this.setModel(Models.createEditPageConfigModel(), "config");
 			this.aValidProps = ["firstname", "middlename", "lastname"];
 			this.token = "";
+			this.oFile = {};
 		},
 
 		getToken: function(sChannel, sEvent, oData) {
@@ -38,6 +40,8 @@ sap.ui.define([
 		onSave: function () {
 			var oModel = this.getModel("data");
 			var oPersonData = oModel.getData();
+			// oPersonData.image = this.byId("idImage").getSrc();
+			// oPersonData.image = this.oFile;
 			if (!this._checkFields(oModel)) {
 				MessageToast.show(this.oBundle.getText("FILL_REQUIRED_FIELD"));
 				return;
@@ -46,6 +50,14 @@ sap.ui.define([
 				var sPath = "/persons";
 				this.showBusy(this.getConfigModel(), "idPersonForm", 10, 0);
 				this.sentRequest("POST", sPath, oPersonData).success(function() {
+					// this.sentRequest("POST", "/imageUpload", this.oFile).success(function() {
+					// 	MessageToast.show(this.oBundle.getText("RECORD_ADD_SUCCESS"));
+					// 	this.onNavBack();
+					// }).fail(function(oError) {
+					// 	this.showRequestError(oError, "ERROR_PERSON_CREATE", this.oBundle);
+					// }).always(function() {
+					// 	this.hideBusy(this.getConfigModel(), "idPersonForm", 10);
+					// });
 					MessageToast.show(this.oBundle.getText("RECORD_ADD_SUCCESS"));
 					this.onNavBack();
 				}).fail(function(oError) {
@@ -65,6 +77,29 @@ sap.ui.define([
 					this.hideBusy(this.getConfigModel(), "idPersonForm", 10);
 				});
 			}
+		},
+
+		onTypeMissmatch: function () {
+			MessageToast.show(this._oBundle.getText("GENERAL_IMAGE_UPLOAD_EXTENTION", [this.byId("idFileUploader").getFileType()]));
+		},
+
+		onPhotoChange: function(oEvent) {
+			var oFile = oEvent.getParameter("files")[0];
+
+			this.oFile = oFile;
+
+			var oReader = new FileReader();
+			oReader.readAsDataURL(oFile);
+			var that = this;
+			oReader.onloadend = function () {
+				that.byId("idImage").setSrc(oReader.result);
+				// that.oFile = {
+				// 	"name": oFile.name,
+				// 	"size": oFile.size,
+				// 	"type": oFile.type,
+				// 	"content": oReader.result
+				// };
+			};
 		},
 
 		onNavBack: function () {

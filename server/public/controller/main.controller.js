@@ -26,7 +26,7 @@ sap.ui.define([
 			var oComponent = this.byId("idPersonTable");
 			var sSearchValue = oEvent.getParameter("newValue");
 			var oBinding = oComponent.getBinding("items");
-			var aFieldNames = [ "firstName", "middleName", "lastName" ];
+			var aFieldNames = [ "firstname", "middlename", "lastname" ];
 			var oFilters = [];
 			if (sSearchValue) {
 				var aFilters = aFieldNames.map(function (sName) {
